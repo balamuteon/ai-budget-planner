@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16
+    container_name: budget_planner_db
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: budget_planner_backend
+    env_file:
+      - .env
+    environment:
+      DB_HOST: ${DB_HOST_DOCKER}
+      DB_PORT: ${DB_PORT_DOCKER}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+
+volumes:
+  db_data:

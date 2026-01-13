@@ -1,0 +1,4 @@
+.env
+ai-planner.session.sql
+.gocache
+.vscode
